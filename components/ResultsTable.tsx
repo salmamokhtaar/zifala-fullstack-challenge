@@ -2,7 +2,6 @@
 import { useMemo, useState } from "react";
 // We read the local dataset to decorate A/B codes with names & capitals
 import countries from "@/lib/capitals.json";
-
 type Pair = { a: string; b: string; km: number };
 
 type Decorated = {
@@ -98,7 +97,6 @@ export default function ResultsTable({ items }: Props) {
             </th>
           </tr>
         </thead>
-
         <tbody>
           {sorted.map((r, i) => (
             <tr key={`${r.aCode}-${r.bCode}-${i}`} className="odd:bg-white even:bg-gray-50">
@@ -117,7 +115,6 @@ export default function ResultsTable({ items }: Props) {
               <td className="p-3 text-right tabular-nums">{r.km.toLocaleString(undefined, { maximumFractionDigits: 1 })}</td>
             </tr>
           ))}
-
           {sorted.length === 0 && (
             <tr>
               <td colSpan={3} className="p-6 text-center text-gray-500">
