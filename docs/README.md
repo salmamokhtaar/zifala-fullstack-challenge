@@ -1,137 +1,152 @@
-Got it ✅ — here’s a complete **README.md** you can copy-paste directly into your project.
-It’s tailored for your **Capital Distance Finder** app, includes sections about running locally, features, tests, design notes, dataset, AI usage, and license.
-
----
 
 ````markdown
 # 🌍 Capital Distance Finder
 
-A full-stack web application to calculate and visualize distances between country capitals using the **Haversine formula**.  
-Built with **Next.js, TypeScript, TailwindCSS, and Leaflet**.
+A high-performance web application for calculating and visualizing distances between country capitals using the **Haversine formula**.  
+Built with **Next.js, TypeScript, TailwindCSS, and React Leaflet**.
 
 ---
 
 ## 🎯 Challenge Overview
 
-This project is my submission for the **Zifala Full Stack Challenge**.  
-The goal was to build an end-to-end application that:
+This is my submission for the **Zifala Full Stack Challenge**.  
+The goal was to build a complete app that calculates distances between countries, shows real-time progress, and provides interactive visualization.
 
-- Given a list of countries, returns all unique country pairs sorted by shortest distance between their capitals.  
-- Example: `["SO", "KE", "ET", "DJ"]` → `["DJ", "SO"] -> 1165.4 km`.  
-- Deliver API, Frontend, Deployment, Tests, and Realtime streaming.
+**Challenge Requirements:**
+- Given a list of countries, return all unique country pairs sorted by shortest distance between their capitals  
+- Example: `["SO", "KE", "ET", "DJ"] → ["DJ","SO"] -> 1165.4 km`  
+- Implement **API, Frontend, Deployment, Tests, and Live Updates**
 
 ---
 
 ## 🚀 Live Deployment
 
-- **App:** [Deployed on Vercel](https://your-vercel-url.vercel.app)  
-- **API Base:** `https://your-vercel-url.vercel.app/api`
+**Application:** https://your-vercel-url.vercel.app  
+**API Base:** https://your-vercel-url.vercel.app/api  
 
 ---
 
 ## 📊 Project Status
 
-✅ **Challenge Complete** – all requirements implemented and deployed.
+✅ **Complete** — All requirements implemented and deployed successfully!  
 
-- ✅ API with endpoints (`/api/countries`, `/api/distances`, `/api/distances/stream`)  
+- ✅ API with endpoints  
 - ✅ Frontend with real-time updates  
 - ✅ Deployment on Vercel  
-- ✅ Unit tests for Haversine + API  
-- ✅ Live progress via **Server-Sent Events (SSE)**  
-- ✅ Bonus: **Map view**, **CSV upload**, **CSV download**  
+- ✅ Streaming updates via SSE  
+- ✅ Bonus: Map view, CSV upload & download  
 
 ---
 
 ## 🚀 Features
 
-- **Multi-Country Selection**: Choose from up to 250 countries  
-- **Real-Time Streaming**: Distances stream progressively using SSE  
-- **Interactive Map View**: Visualize top 20 shortest capital-to-capital distances  
-- **CSV Export**: Download results for analysis  
-- **CSV Upload**: Provide your own custom list of countries + coordinates  
-- **Progress Bar**: See computation progress live  
-- **Performance Optimized**: Efficient handling of 31,125 pairs (250 countries)
+- **Multi-Country Selection**: Choose 2–250 countries from a searchable list  
+- **Real-Time Distance Calculation**: Efficient O(n²) calculation with streaming  
+- **Interactive Map View**: Top 20 shortest distances visualized on a world map  
+- **Server-Sent Events**: Smooth live progress updates  
+- **CSV Export**: Download results as Excel/CSV  
+- **CSV Upload**: Import custom capital datasets  
+- **Progress Tracking**: Dynamic progress bar with percentage  
+- **Simple UI**: Clean, responsive, and user-friendly  
 
 ---
 
 ## 📋 Prerequisites
 
-- Node.js **18+**  
+- Node.js 18+  
 - npm or yarn  
-- Modern browser (Chrome, Firefox, Edge, Safari)
+- A modern web browser  
 
 ---
 
 ## 🛠️ How to Run Locally
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/salmamokhtaar/zifala-fullstack-challenge.git
-   cd zifala-fullstack-challenge
+### 1. Clone the Repository
+```bash
+git clone <your-fork-url>
+cd zifala-fullstack-challenge
 ````
 
-2. **Install dependencies**
+### 2. Install Dependencies
 
-   ```bash
-   npm install
-   ```
+```bash
+npm install
+```
 
-3. **Start development server**
+### 3. Start Development Server
 
-   ```bash
-   npm run dev
-   ```
+```bash
+npm run dev
+```
 
-   App available at: `http://localhost:3000`
+Runs at **[http://localhost:3000](http://localhost:3000)**
 
-4. **Build for production**
+### 4. Build for Production
 
-   ```bash
-   npm run build
-   npm start
-   ```
+```bash
+npm run build
+npm start
+```
 
 ---
 
 ## 🧪 How to Run Tests
 
-Run unit + API tests:
+Run all tests:
 
 ```bash
 npm test
 ```
 
-* **Unit Tests**: Haversine formula, pair generation
-* **API Tests**: Validation, sorting
-* **Integration Test**: Example with 4 countries
+Run in watch mode:
+
+```bash
+npm run test:watch
+```
+
+Run with coverage:
+
+```bash
+npm run test:coverage
+```
+
+**Test Coverage Includes:**
+
+* Utility functions (Haversine formula, pair generator)
+* API logic (validation + sorting)
+* End-to-end flow
 
 ---
 
 ## 🎨 Design Notes
 
-### Architecture Choices
+### Architecture
 
-* **Next.js (App Router)** – for API routes and frontend in one project
-* **TypeScript** – type safety and reliability
-* **TailwindCSS** – fast, consistent styling
-* **Leaflet (via React-Leaflet)** – interactive map visualization
-* **SSE (Server-Sent Events)** – lightweight realtime streaming
+1. **Next.js App Router**
+
+   * Modern React patterns, SSR, built-in API routes
+2. **TypeScript**
+
+   * Type safety, IntelliSense, fewer runtime errors
+3. **Tailwind CSS**
+
+   * Utility-first styling, responsive design
+4. **React Leaflet**
+
+   * Interactive maps for visualization
 
 ### Data Source
 
-* **Custom JSON dataset** of \~250 countries
-* Contains: ISO2 code, country name, capital, latitude, longitude
-* Distance calculated between capitals using **Haversine formula**
-* **Limitations**: Only capital cities, not subdivisions or regions
+* **Dataset**: \~250 countries with ISO2, name, capital, lat/lon
+* **Format**: JSON file (`/lib/capitals.json`)
+* **Distance Calculation**: Haversine formula (accurate within \~0.5%)
 
 ### Performance
 
-* Complexity: **O(n²)** (31,125 pairs for 250 countries)
-* Optimized with:
-
-  * Streaming results in batches
-  * Progress bar to avoid UI blocking
-  * Map limited to **top 20 shortest pairs** for clarity
+* Handles up to **250 countries** = 31,125 unique pairs
+* Uses **Server-Sent Events** for streaming progress
+* Map limited to top 20 shortest distances for clarity
+* CSV upload allows **custom datasets**
 
 ---
 
@@ -139,25 +154,32 @@ npm test
 
 I used **AI (ChatGPT)** during development for:
 
-* 🚀 **Project setup help** (Next.js + TypeScript best practices)
-* 📝 **Generating starter code** (API routes, SSE streaming boilerplate)
-* 🎨 **UI refinements** (Tailwind styling, button layouts, table improvements)
-* 🧪 **Test cases** (unit + integration test scaffolding)
-* 🐞 **Debugging** (hydration errors, TypeScript type fixes)
+1. **API scaffolding** — helped generate SSE streaming boilerplate
+2. **React components** — created reusable UI parts quickly
+3. **Styling with Tailwind** — suggested clean and minimal UI styles
+4. **Debugging** — fixed hydration and TypeScript issues
+5. **README preparation** — structured documentation
 
-**Why AI was helpful:**
-It accelerated repetitive setup, suggested optimizations, and let me focus on core logic & design decisions.
+**Why it was helpful:**
+
+* Accelerated setup & boilerplate
+* Maintained modern best practices
+* Freed time to focus on challenge logic & UX
 
 ---
 
-## ⏱️ Time Complexity
+## ⏱️ Time Complexity Analysis
 
-* **Pairs generation**: `O(n²)`
-* **Total pairs**: `n * (n - 1) / 2`
+**Pairs generation:** O(n²)
+Total pairs = `n * (n-1) / 2`
 
-  * Example: 250 countries → 31,125 pairs
+Example:
 
-Performance metrics:
+* 10 countries → 45 pairs
+* 100 countries → 4,950 pairs
+* 250 countries → 31,125 pairs
+
+**Performance Metrics:**
 
 | Countries | Pairs  | Time   | Memory |
 | --------- | ------ | ------ | ------ |
@@ -165,53 +187,40 @@ Performance metrics:
 | 100       | 4,950  | 3–5s   | \~15MB |
 | 250       | 31,125 | 15–25s | \~75MB |
 
----
+**Optimizations:**
 
-## 📂 Folder Structure
-
-```
-/app
-  /api
-    /countries
-    /distances
-    /distances/stream
-  /components
-    CountrySelector.tsx
-    ProgressBar.tsx
-    ResultsTable.tsx
-    DownloadCSV.tsx
-    UploadCSV.tsx
-    MapView.tsx
-/lib
-  dataset.ts
-  geo.ts
-  util.ts
-/public
-  sample-capitals.csv
-```
+* Streaming (SSE) prevents UI freeze
+* Caching repeated datasets
+* Lazy map loading
 
 ---
 
-## 📄 License
+## 🔧 Tech Stack
 
-MIT © 2025 — Salma Mokhtaar
-
-This project is open source under the **MIT License**, meaning:
-
-* ✅ Free to use, copy, modify, share (even commercially)
-* ✅ Must include credit (license + copyright)
-* ❌ No liability if it breaks or causes issues
+**Frontend**: Next.js 15, TypeScript, TailwindCSS
+**Backend**: Next.js API Routes, Node.js
+**Maps**: Leaflet + React Leaflet
+**Streaming**: Server-Sent Events
+**Testing**: Jest + React Testing Library
+**Deployment**: Vercel
 
 ---
 
-## ✅ Challenge Complete
+## 🚀 Deployment Notes
 
-All requirements of the **Zifala Full Stack Challenge** were implemented:
+* Deployed on **Vercel** with automatic CI/CD
+* Build command: `npm run build`
+* Deployment command: `vercel --prod`
+* Global CDN, HTTPS by default
 
-* API
-* Frontend
-* Deployment
-* Tests
-* Live streaming
-* Bonus features (Map View, CSV Upload/Download)
+---
+
+## 📊 Challenge Completion
+
+* ✅ API endpoints
+* ✅ Frontend with SSE
+* ✅ Deployment
+* ✅ Map visualization
+* ✅ CSV export + upload
+* ✅ Bonus features included
 
