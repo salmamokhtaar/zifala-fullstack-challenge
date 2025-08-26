@@ -193,15 +193,7 @@
   {"iso2":"SJ","name":"Svalbard and Jan Mayen","capital":"Longyearbyen","lat":78.2233,"lon":15.6267},
   {"iso2":"GI","name":"Gibraltar","capital":"Gibraltar","lat":36.1408,"lon":-5.3536},
   {"iso2":"BM","name":"Bermuda","capital":"Hamilton","lat":32.2948,"lon":-64.7814},
-  {"iso2":"TC","name":"Turks and Caicos Islands","capital":"Cockburn Town","lat":21.6940,"lon":-71.7979},
-  {"iso2":"VG","name":"British Virgin Islands","capital":"Road Town","lat":18.4207,"lon":-64.6400},
-  {"iso2":"VI","name":"U.S. Virgin Islands","capital":"Charlotte Amalie","lat":18.3358,"lon":-64.8963},
-  {"iso2":"PR","name":"Puerto Rico","capital":"San Juan","lat":18.4655,"lon":-66.1057},
-  {"iso2":"DO","name":"Dominican Republic","capital":"Santo Domingo","lat":18.4861,"lon":-69.9312},
-  {"iso2":"HT","name":"Haiti","capital":"Port-au-Prince","lat":18.5944,"lon":-72.3074},
-  {"iso2":"JM","name":"Jamaica","capital":"Kingston","lat":17.9710,"lon":-76.7926},
-  {"iso2":"CU","name":"Cuba","capital":"Havana","lat":23.1136,"lon":-82.3666},
-  {"iso2":"BS","name":"Bahamas","capital":"Nassau","lat":25.0343,"lon":-77.3963},
+   {"iso2":"BS","name":"Bahamas","capital":"Nassau","lat":25.0343,"lon":-77.3963},
   {"iso2":"BB","name":"Barbados","capital":"Bridgetown","lat":13.1132,"lon":-59.5988},
   {"iso2":"GD","name":"Grenada","capital":"St. George's","lat":12.0564,"lon":-61.7485},
   {"iso2":"LC","name":"Saint Lucia","capital":"Castries","lat":14.0101,"lon":-60.9878},
@@ -216,5 +208,14 @@
   {"iso2":"SV","name":"El Salvador","capital":"San Salvador","lat":13.6929,"lon":-89.2182},
   {"iso2":"NI","name":"Nicaragua","capital":"Managua","lat":12.1364,"lon":-86.2514},
   {"iso2":"CR","name":"Costa Rica","capital":"San José","lat":9.9281,"lon":-84.0907},
-  {"iso2":"PA","name":"Panama","capital":"Panama City","lat":8.5380,"lon":-80.7821}
+  {"iso2":"PA","name":"Panama","capital":"Panama City","lat":8.5380,"lon":-80.7821},
+  {"iso2":"TC","name":"Turks and Caicos Islands","capital":"Cockburn Town","lat":21.6940,"lon":-71.7979},
+  {"iso2":"VG","name":"British Virgin Islands","capital":"Road Town","lat":18.4207,"lon":-64.6400},
+  {"iso2":"VI","name":"U.S. Virgin Islands","capital":"Charlotte Amalie","lat":18.3358,"lon":-64.8963},
+  {"iso2":"PR","name":"Puerto Rico","capital":"San Juan","lat":18.4655,"lon":-66.1057},
+  {"iso2":"DO","name":"Dominican Republic","capital":"Santo Domingo","lat":18.4861,"lon":-69.9312},
+  {"iso2":"HT","name":"Haiti","capital":"Port-au-Prince","lat":18.5944,"lon":-72.3074},
+  {"iso2":"JM","name":"Jamaica","capital":"Kingston","lat":17.9710,"lon":-76.7926},
+  {"iso2":"CU","name":"Cuba","capital":"Havana","lat":23.1136,"lon":-82.3666}
+ 
 ]
