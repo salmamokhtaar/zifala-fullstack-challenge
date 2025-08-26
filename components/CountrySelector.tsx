@@ -6,9 +6,11 @@ type Country = { iso2: string; name: string; capital: string; lat: number; lon: 
 export default function CountrySelector({
   value,
   onChange,
+  onClear,            // NEW (optional)
 }: {
   value: string[];
   onChange: (codes: string[]) => void;
+  onClear?: () => void;  // NEW (optional)
 }) {
   const [all, setAll] = useState<Country[]>([]);
   const [q, setQ] = useState("");
@@ -36,6 +38,12 @@ export default function CountrySelector({
     else onChange([...value, code]);
   };
 
+  function handleClear() {
+    setQ("");          // clear search box
+    onChange([]);      // clear selection
+    onClear?.();       // let parent reset progress/results/map
+  }
+
   return (
     <div className="space-y-2">
       <div className="flex gap-2">
@@ -47,7 +55,7 @@ export default function CountrySelector({
         />
         <button
           type="button"
-          onClick={() => onChange([])}
+          onClick={handleClear}
           className="rounded-xl border px-3 py-2"
           aria-label="Clear selection"
         >

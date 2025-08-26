@@ -7,7 +7,6 @@ import ProgressBar from "@/components/ProgressBar";
 import ResultsTable from "@/components/ResultsTable";
 import DownloadCSV from "@/components/DownloadCSV";
 
-// Load Leaflet map only on the client
 const MapView = dynamic(() => import("@/components/MapView"), { ssr: false });
 
 type Pair = { a: string; b: string; km: number };
@@ -20,11 +19,26 @@ export default function Page() {
   const [pairs, setPairs] = useState<Pair[]>([]);
   const [running, setRunning] = useState(false);
   const [showMap, setShowMap] = useState(false);
-  const resultsRef = useRef<HTMLDivElement>(null);
 
-  // Button enablement
+  const resultsRef = useRef<HTMLDivElement>(null);
+  const esRef = useRef<EventSource | null>(null);      // NEW
+
   const canStart = codes.length >= 2 && !running;
   const canToggleMap = codes.length >= 2 && (running || pairs.length > 0);
+
+  const clearAll = useCallback(() => {
+    // stop any running stream
+    esRef.current?.close();
+    esRef.current = null;
+
+    // reset everything
+    setCodes([]);
+    setPairs([]);
+    setDone(0);
+    setTotal(0);
+    setRunning(false);
+    setShowMap(false);
+  }, []);
 
   const start = useCallback(() => {
     if (codes.length < 2) {
@@ -32,6 +46,7 @@ export default function Page() {
       return;
     }
 
+    // reset progress & results for a fresh run
     setPairs([]);
     setDone(0);
     setTotal((codes.length * (codes.length - 1)) / 2);
@@ -40,48 +55,61 @@ export default function Page() {
     const es = new EventSource(
       `/api/distances/stream?countries=${encodeURIComponent(JSON.stringify(codes))}`
     );
+    esRef.current = es; // keep handle so Clear can cancel
 
     es.onmessage = (evt) => {
       const m: Msg = JSON.parse(evt.data);
       setDone(m.done);
       setTotal(m.total);
-      setPairs((arr) => [...arr, m.latest]); // live (unsorted)
+      setPairs((arr) => [...arr, m.latest]); // live unsorted
     };
 
     es.addEventListener("end", async () => {
       es.close();
-      // Fetch final, fully-sorted list
+      esRef.current = null;
+
       const res = await fetch("/api/distances", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ countries: codes }),
       });
       const data = await res.json();
-      if (data?.pairs) setPairs(data.pairs);
+      if (data?.pairs) setPairs(data.pairs); // sorted
 
       setRunning(false);
-      // Jump to results
       resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
     });
 
     es.addEventListener("error", () => {
-      // Optional: toast or message; EventSource will auto-retry while server is up.
+      // optional: toast; EventSource will auto-retry while server is available
     });
   }, [codes]);
 
   return (
     <main className="max-w-5xl mx-auto p-6 space-y-6">
-      <h1 className="text-2xl font-bold">Capital Distance Finder</h1>
-      <p className="opacity-75">
-        Select countries, stream progress live, and get all unique pairs sorted by the shortest
-        distance between their capitals.
-      </p>
+       <h1 className="text-7xl font-bold text-green-700">Capital Distance Finder</h1>
+  <p className="opacity-75">
+    Select countries, stream progress live, and get all unique pairs sorted by the shortest
+    distance between their capitals.
+  </p>
 
       {/* 1) Choose Countries */}
       <section className="space-y-3">
         <h2 className="font-semibold">1) Choose Countries</h2>
-        <CountrySelector value={codes} onChange={(v) => { setCodes(v); if (v.length < 2) setShowMap(false); }} />
-        <div className="text-sm opacity-70">Selected: {codes.length ? codes.join(", ") : "—"}</div>
+
+        {/* Pass onClear to reset everything */}
+        <CountrySelector
+          value={codes}
+          onChange={(v) => {
+            setCodes(v);
+            if (v.length < 2) setShowMap(false);
+          }}
+          onClear={clearAll}
+        />
+
+        <div className="text-sm opacity-70">
+          Selected: {codes.length ? codes.join(", ") : "—"}
+        </div>
 
         <div className="flex gap-3 items-center">
           <button
@@ -96,11 +124,21 @@ export default function Page() {
             onClick={() => canToggleMap && setShowMap((s) => !s)}
             disabled={!canToggleMap}
             className="px-4 py-2 rounded-xl border disabled:opacity-50 disabled:cursor-not-allowed"
-            title={!canToggleMap ? "Select at least two countries and press Start to enable the map" : ""}
+            title={!canToggleMap ? "Select ≥ 2 countries and press Start to enable the map" : ""}
             aria-disabled={!canToggleMap}
           >
             {showMap ? "Hide Map" : "Map View"}
           </button>
+
+          {/* Optional: explicit global Reset button (same as Clear) */}
+          {/* icommrnted because i have clear button */}
+          {/* <button
+            onClick={clearAll}
+            className="px-4 py-2 rounded-xl border"
+            title="Reset selection, progress, results and map"
+          >
+            Reset All
+          </button> */}
         </div>
 
         {codes.length < 2 && (
@@ -114,7 +152,7 @@ export default function Page() {
         <ProgressBar done={done} total={total} />
       </section>
 
-      {/* Map only after Start (i.e., when pairs exist or during run) */}
+      {/* Map */}
       {showMap && pairs.length > 0 && (
         <section className="space-y-3">
           <h2 className="font-semibold">Map View (Top 20)</h2>
