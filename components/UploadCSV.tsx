@@ -1,90 +1,65 @@
 "use client";
-
 import { useRef } from "react";
 
-type UploadResult = {
-  entries: { iso2: string; name?: string; capital?: string; lat: number; lon: number }[];
-  pairs: { a: string; b: string; km: number }[];
-  codes: string[];
-};
+type Row = { a: string; b: string; km: number };
+type Entry = { iso2: string; name?: string; capital?: string; lat: number; lon: number };
 
 export default function UploadCSV({
   onLoaded,
-  showSampleLink = false,          // default: don't show a Sample link here
-  samplePath = "/sample-capitals.csv",
 }: {
-  onLoaded: (r: UploadResult) => void;
-  showSampleLink?: boolean;
-  samplePath?: string;
+  onLoaded: (data: { entries: Entry[]; pairs: Row[]; codes: string[] }) => void;
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
 
   async function handleFile(file: File) {
     const text = await file.text();
-    // very light CSV parsing (expecting headers iso2,lat,lon,capital,name)
-    const [header, ...rows] = text
-      .split(/\r?\n/)
-      .map((l) => l.trim())
-      .filter(Boolean);
+    // Expect header: iso2,name,capital,lat,lon
+    const [headerLine, ...lines] = text.split(/\r?\n/).filter(Boolean);
+    const headers = headerLine.split(",").map((s) => s.trim().toLowerCase());
+    const idx = {
+      iso2: headers.indexOf("iso2"),
+      name: headers.indexOf("name"),
+      capital: headers.indexOf("capital"),
+      lat: headers.indexOf("lat"),
+      lon: headers.indexOf("lon"),
+    };
+    const entries: Entry[] = [];
+    for (const line of lines) {
+      const cells = line.split(",");
+      const iso2 = cells[idx.iso2]?.trim();
+      const name = cells[idx.name]?.trim();
+      const capital = cells[idx.capital]?.trim();
+      const lat = Number(cells[idx.lat]);
+      const lon = Number(cells[idx.lon]);
+      if (!iso2 || !Number.isFinite(lat) || !Number.isFinite(lon)) continue;
+      entries.push({ iso2: iso2.toUpperCase(), name, capital, lat, lon });
+    }
 
-    const cols = header.split(",").map((c) => c.trim().toLowerCase());
-    const iIso = cols.indexOf("iso2");
-    const iLat = cols.indexOf("lat");
-    const iLon = cols.indexOf("lon");
-    const iCap = cols.indexOf("capital");
-    const iName = cols.indexOf("name");
-
-    const entries = rows
-      .map((r) => r.split(","))
-      .map((cells) => ({
-        iso2: (cells[iIso] || "").toUpperCase(),
-        lat: Number(cells[iLat]),
-        lon: Number(cells[iLon]),
-        capital: iCap >= 0 ? cells[iCap] : undefined,
-        name: iName >= 0 ? cells[iName] : undefined,
-      }))
-      .filter((e) => e.iso2 && Number.isFinite(e.lat) && Number.isFinite(e.lon));
-
-    const res = await fetch("/api/upload-pairs", {
+    const res = await fetch("/api/distances/custom", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ entries }),
     });
-
     const data = await res.json();
-    if (!res.ok) {
-      alert(data?.error || "Upload failed");
-      return;
-    }
-    onLoaded(data as UploadResult);
+    if (data?.pairs) onLoaded(data);
   }
 
   return (
-    <div className="flex items-center gap-3">
+    <>
+      <button
+        onClick={() => inputRef.current?.click()}
+        className="rounded-lg border px-4 py-2 text-sm hover:bg-gray-50"
+        title="Upload CSV with iso2,name,capital,lat,lon"
+      >
+        Upload CSV
+      </button>
       <input
         ref={inputRef}
         type="file"
         accept=".csv,text/csv"
-        className="hidden"
         onChange={(e) => e.target.files?.[0] && handleFile(e.target.files[0])}
+        className="hidden"
       />
-      <button
-        type="button"
-        onClick={() => inputRef.current?.click()}
-        className="inline-flex items-center rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-800 hover:bg-gray-50"
-      >
-        Upload CSV
-      </button>
-
-      {showSampleLink && (
-        <a
-          href={samplePath}
-          download
-          className="text-sm text-gray-600 underline underline-offset-2 hover:text-gray-900"
-        >
-          Sample CSV
-        </a>
-      )}
-    </div>
+    </>
   );
 }
