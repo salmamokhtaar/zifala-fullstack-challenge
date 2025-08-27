@@ -21,8 +21,8 @@ The goal was to build a complete app that calculates distances between countries
 
 ## 🚀 Live Deployment
 
-**Application:** https://your-vercel-url.vercel.app  
-**API Base:** https://your-vercel-url.vercel.app/api  
+**Application:** https://zifala-fullstack-engineer-challenge.vercel.app  
+**API Base:** https://zifala-fullstack-engineer-challenge.vercel.app/api  
 
 ---
 
@@ -122,18 +122,10 @@ npm run test:coverage
 
 ### Architecture
 
-1. **Next.js App Router**
-
-   * Modern React patterns, SSR, built-in API routes
-2. **TypeScript**
-
-   * Type safety, IntelliSense, fewer runtime errors
-3. **Tailwind CSS**
-
-   * Utility-first styling, responsive design
-4. **React Leaflet**
-
-   * Interactive maps for visualization
+1. **Next.js App Router** – Modern React patterns, SSR, built-in API routes
+2. **TypeScript** – Type safety, IntelliSense, fewer runtime errors
+3. **Tailwind CSS** – Utility-first styling, responsive design
+4. **React Leaflet** – Interactive maps for visualization
 
 ### Data Source
 
@@ -224,3 +216,11 @@ Example:
 * ✅ CSV export + upload
 * ✅ Bonus features included
 
+👉 Live App: [https://zifala-fullstack-engineer-challenge.vercel.app](https://zifala-fullstack-engineer-challenge.vercel.app)
+
+```
+
+---
+
+Would you like me to also **draft the PR description** for submitting this to Zifala’s original repo? That way you just paste it when you open the Pull Request.
+```
