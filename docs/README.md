@@ -21,7 +21,7 @@ The goal was to build a complete app that calculates distances between countries
 
 ## 🚀 Live Deployment
 
-**Application:** https://zifala-fullstack-engineer-challenge.vercel.app  
+**Live Link Url:** https://zifala-fullstack-engineer-challenge.vercel.app  
 **API Base:** https://zifala-fullstack-engineer-challenge.vercel.app/api  
 
 ---
